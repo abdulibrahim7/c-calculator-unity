@@ -30,16 +30,14 @@ void test_add_zero(void) {
     TEST_ASSERT_EQUAL(5, add(5, 0)); // 5 + 0 = 5
 }
 
-// Test integer overflow
-void test_add_overflow(void) {
-    int result = add(INT_MAX, 1);
-    TEST_ASSERT_TRUE(result < 0); // overflow should wrap to negative
+void test_add_representable_boundaries(void) {
+    TEST_ASSERT_EQUAL_INT(INT_MAX, add(INT_MAX - 1, 1));
+    TEST_ASSERT_EQUAL_INT(INT_MIN, add(INT_MIN + 1, -1));
 }
 
-// Test integer underflow
-void test_add_underflow(void) {
-    int result = add(INT_MIN, -1);
-    TEST_ASSERT_TRUE(result > 0); // underflow should wrap to positive
+void test_divide_truncates_toward_zero(void) {
+    TEST_ASSERT_EQUAL_INT(-2, divide(-5, 2));
+    TEST_ASSERT_EQUAL_INT(-2, divide(5, -2));
 }
 
 void test_subtract(void) {
@@ -61,10 +59,10 @@ int main(void) {
     RUN_TEST(test_add_positive_and_negative_numbers);
     RUN_TEST(test_add_negative_numbers);
     RUN_TEST(test_add_zero);
-    RUN_TEST(test_add_overflow);
-    RUN_TEST(test_add_underflow);
+    RUN_TEST(test_add_representable_boundaries);
     RUN_TEST(test_subtract);
     RUN_TEST(test_multiply);
     RUN_TEST(test_divide);
+    RUN_TEST(test_divide_truncates_toward_zero);
     return UNITY_END();
 }
